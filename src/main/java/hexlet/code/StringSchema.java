@@ -1,18 +1,22 @@
+package hexlet.code;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringSchema {
-    private boolean cannotBeEmpty;
+public class StringSchema extends BaseSchema {
+    private boolean notEmpty;
     private int minStringLength;
     private List<String> requiredContent;
 
     public final void required() {
-        cannotBeEmpty = true;
+        notEmpty = true;
     }
 
-    public final boolean isValid(String str) {
+    @Override
+    public final boolean isValid(Object o) {
+        String str = (String) o;
         boolean isEmpty = str == null || str.length() == 0;
-        if (cannotBeEmpty & isEmpty) {
+        if (notEmpty & isEmpty) {
             return false;
         }
         if (!isEmpty && str.length() < minStringLength) {

@@ -1,10 +1,12 @@
+package hexlet.code;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ValidatorTest {
+class StringSchemaTest {
     private static StringSchema schema;
 
     public static StringSchema getSchema() {
@@ -12,7 +14,7 @@ class ValidatorTest {
     }
 
     public static void setSchema(StringSchema sch) {
-        ValidatorTest.schema = sch;
+        StringSchemaTest.schema = sch;
     }
 
     @BeforeEach
