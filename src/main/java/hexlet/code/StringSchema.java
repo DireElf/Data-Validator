@@ -4,43 +4,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringSchema extends BaseSchema {
-    private boolean notEmpty;
+    private boolean needNotEmpty;
     private int minStringLength;
     private List<String> requiredContent;
 
-    public final void required() {
-        notEmpty = true;
+    public final StringSchema required() {
+        this.needNotEmpty = true;
+        return this;
+    }
+
+    public final StringSchema minLength(int min) {
+        this.minStringLength = min;
+        return this;
+    }
+
+    public final StringSchema contains(String str) {
+        if (this.requiredContent == null) {
+            this.requiredContent = new ArrayList<>();
+        }
+        this.requiredContent.add(str);
+        return this;
     }
 
     @Override
-    public final boolean isValid(Object o) {
+    public final void check(Object o) {
         String str = (String) o;
         boolean isEmpty = str == null || str.length() == 0;
-        if (notEmpty & isEmpty) {
-            return false;
+        if (needNotEmpty & isEmpty) {
+            getValidationResults().add(false);
+            return;
         }
         if (!isEmpty && str.length() < minStringLength) {
-            return false;
+            getValidationResults().add(false);
+            return;
         }
         if (!isEmpty && requiredContent != null) {
             for (String s : requiredContent) {
                 if (!str.contains(s)) {
-                    return false;
+                    getValidationResults().add(false);
+                    return;
                 }
             }
         }
-        return true;
-    }
-
-    public final void minLength(int min) {
-        minStringLength = min;
-    }
-
-    public final StringSchema contains(String str) {
-        if (requiredContent == null) {
-            requiredContent = new ArrayList<>();
-        }
-        requiredContent.add(str);
-        return this;
     }
 }
