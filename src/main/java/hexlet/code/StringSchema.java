@@ -27,24 +27,39 @@ public class StringSchema extends BaseSchema {
     }
 
     @Override
-    public final void check(Object o) {
+    public final boolean isValid(Object o) {
         String str = (String) o;
-        boolean isEmpty = str == null || str.length() == 0;
-        if (needNotEmpty & isEmpty) {
-            getValidationResults().add(false);
-            return;
+        if (needNotEmpty && hasEmpty(str)) {
+            return false;
         }
-        if (!isEmpty && str.length() < minStringLength) {
-            getValidationResults().add(false);
-            return;
+        if (minStringLength != 0 && !hasValidLength(str)) {
+            return false;
         }
-        if (!isEmpty && requiredContent != null) {
+        if (requiredContent != null && !hasRequiredContent(str)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
+
+    private boolean hasValidLength(String str) {
+        if (!hasEmpty(str) && str.length() < this.minStringLength) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasRequiredContent(String str) {
+        if (!hasEmpty(str)) {
             for (String s : requiredContent) {
                 if (!str.contains(s)) {
-                    getValidationResults().add(false);
-                    return;
+                    return false;
                 }
             }
         }
+        return true;
     }
 }

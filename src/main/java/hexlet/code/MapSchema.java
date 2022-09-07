@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class MapSchema extends BaseSchema {
-    private boolean notNull;
+    private boolean needNotNull;
     private boolean needMap;
     private int minEntriesAmount;
     private Map<String, BaseSchema> schemas;
 
     public final MapSchema required() {
-        this.notNull = true;
+        this.needNotNull = true;
         this.needMap = true;
         return this;
     }
@@ -26,34 +26,50 @@ public class MapSchema extends BaseSchema {
     }
 
     @Override
-    public final void check(Object o) {
-        boolean isNull = o == null;
-        if (notNull && isNull) {
-            getValidationResults().add(false);
-            return;
+    public final boolean isValid(Object o) {
+        if (needNotNull && isNull(o)) {
+            return false;
         }
-        boolean isMap = o instanceof Map;
-        if (!isNull && needMap && !isMap) {
-            getValidationResults().add(false);
-            return;
+        if (needMap && !isMap(o)) {
+            return false;
         }
-        if (!isNull && isMap) {
+        if (minEntriesAmount > 0 && !hasMinEntriesAmount(o)) {
+            return false;
+        }
+        if (this.schemas != null && !hasSchema(o)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isMap(Object o) {
+        if (!isNull(o)) {
+            return o instanceof Map;
+        }
+        return false;
+    }
+
+    private boolean hasMinEntriesAmount(Object o) {
+        if (!isNull(o) && isMap(o)) {
             Map<?, ?> map = (Map<?, ?>) o;
-            if (this.schemas != null) {
-                Set<?> keys = map.keySet();
-                for (Object key : keys) {
-                    if (this.schemas.containsKey(key)) {
-                        BaseSchema schema = this.schemas.get(key);
-                        if (!schema.isValid(map.get(key))) {
-                            getValidationResults().add(false);
-                            return;
-                        }
+            return map.size() >= minEntriesAmount;
+        }
+        return true;
+    }
+
+    private boolean hasSchema(Object o) {
+        if (!isNull(o) && isMap(o)) {
+            Map<?, ?> map = (Map<?, ?>) o;
+            Set<?> keys = map.keySet();
+            for (Object key : keys) {
+                if (this.schemas.containsKey(key)) {
+                    BaseSchema schema = this.schemas.get(key);
+                    if (!schema.isValid(map.get(key))) {
+                        return false;
                     }
                 }
             }
-            if (map.size() < minEntriesAmount) {
-                getValidationResults().add(false);
-            }
         }
+        return true;
     }
 }
