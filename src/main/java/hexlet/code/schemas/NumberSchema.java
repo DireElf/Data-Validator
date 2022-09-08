@@ -1,24 +1,24 @@
 package hexlet.code.schemas;
 
 public class NumberSchema extends BaseSchema {
-    private boolean needNotNull;
-    private boolean needPositive;
-    private boolean needRange;
+    private boolean hasRequired;
+    private boolean shouldPositive;
+    private boolean hasRange;
     private int lowerBound;
     private int upperBound;
 
     public final NumberSchema required() {
-        this.needNotNull = true;
+        this.hasRequired = true;
         return this;
     }
 
     public final NumberSchema positive() {
-        this.needPositive = true;
+        this.shouldPositive = true;
         return this;
     }
 
     public final NumberSchema range(int min, int max) {
-        this.needRange = true;
+        this.hasRange = true;
         this.lowerBound = min;
         this.upperBound = max;
         return this;
@@ -26,38 +26,36 @@ public class NumberSchema extends BaseSchema {
 
     @Override
     public final boolean isValid(Object o) {
-        setObjectToValidate(o);
-        return checkConditions(
-                needNotNull && isNull(),
-                needNotNull && !isNumber(),
-                needPositive && !isPositive(),
-                needRange && !inRange()
-        );
+        return checkConditions(isRequired(o), isPositive(o), inRange(o));
     }
 
-    private boolean isNumber() {
-        if (!isNull()) {
-            return getObjectToValidate() instanceof Number;
-        }
-        return false;
-    }
-
-    private boolean isPositive() {
-        if (isNull() && !needNotNull) {
+    private boolean isRequired(Object o) {
+        if (!hasRequired) {
             return true;
         }
-        if (!isNull() && isNumber()) {
-            int x = (int) getObjectToValidate();
-            return x > 0;
-        }
-        return false;
+        return o instanceof Number;
     }
 
-    private boolean inRange() {
-        if (!isNull() && isNumber()) {
-            int x = (int) getObjectToValidate();
+    private boolean isPositive(Object o) {
+        if (!shouldPositive || o == null) {
+            return true;
+        }
+        if (!(o instanceof Number)) {
+            return false;
+        } else {
+            return (int) o > 0;
+        }
+    }
+
+    private boolean inRange(Object o) {
+        if (!hasRange) {
+            return true;
+        }
+        if (!(o instanceof Number)) {
+            return false;
+        } else {
+            int x = (int) o;
             return x >= lowerBound && x <= upperBound;
         }
-        return false;
     }
 }
