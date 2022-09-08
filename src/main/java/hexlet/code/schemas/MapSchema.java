@@ -26,40 +26,41 @@ public class MapSchema extends BaseSchema {
     }
 
     @Override
-    public final boolean isValid(Object o) {
-        if (needNotNull && isNull(o)) {
+    public final boolean isValid(Object object) {
+        this.o = object;
+        if (needNotNull && isNull()) {
             return false;
         }
-        if (needMap && !isMap(o)) {
+        if (needMap && !isMap()) {
             return false;
         }
-        if (minEntriesAmount > 0 && !hasMinEntriesAmount(o)) {
+        if (minEntriesAmount > 0 && !hasMinEntriesAmount()) {
             return false;
         }
-        if (this.schemas != null && !hasSchema(o)) {
+        if (this.schemas != null && !hasSchema()) {
             return false;
         }
         return true;
     }
 
-    private boolean isMap(Object o) {
-        if (!isNull(o)) {
-            return o instanceof Map;
+    private boolean isMap() {
+        if (!isNull()) {
+            return this.o instanceof Map;
         }
         return false;
     }
 
-    private boolean hasMinEntriesAmount(Object o) {
-        if (!isNull(o) && isMap(o)) {
-            Map<?, ?> map = (Map<?, ?>) o;
+    private boolean hasMinEntriesAmount() {
+        if (!isNull() && isMap()) {
+            Map<?, ?> map = (Map<?, ?>) this.o;
             return map.size() >= minEntriesAmount;
         }
         return true;
     }
 
-    private boolean hasSchema(Object o) {
-        if (!isNull(o) && isMap(o)) {
-            Map<?, ?> map = (Map<?, ?>) o;
+    private boolean hasSchema() {
+        if (!isNull() && isMap()) {
+            Map<?, ?> map = (Map<?, ?>) this.o;
             Set<?> keys = map.keySet();
             for (Object key : keys) {
                 if (this.schemas.containsKey(key)) {

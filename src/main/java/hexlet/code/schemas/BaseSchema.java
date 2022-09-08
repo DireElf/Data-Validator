@@ -1,9 +1,10 @@
 package hexlet.code.schemas;
 
 public abstract class BaseSchema {
-    public abstract boolean isValid(Object o);
+    protected Object o;
 
-    public final boolean isNull(Object o) {
+    public abstract boolean isValid(Object o);
+    public final boolean isNull() {
         return o == null;
     }
 }

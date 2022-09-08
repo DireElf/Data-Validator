@@ -7,6 +7,7 @@ public class StringSchema extends BaseSchema {
     private boolean needNotEmpty;
     private int minStringLength;
     private List<String> requiredContent;
+    private String str;
 
     public final StringSchema required() {
         this.needNotEmpty = true;
@@ -27,35 +28,47 @@ public class StringSchema extends BaseSchema {
     }
 
     @Override
-    public final boolean isValid(Object o) {
-        String str = (String) o;
-        if (needNotEmpty && hasEmpty(str)) {
+    public final boolean isValid(Object object) {
+        this.o = object;
+        if (isString()) {
+            this.str = (String) o;
+        } else {
             return false;
         }
-        if (minStringLength != 0 && !hasValidLength(str)) {
+        if (needNotEmpty && hasEmpty()) {
             return false;
         }
-        if (requiredContent != null && !hasRequiredContent(str)) {
+        if (minStringLength != 0 && !hasValidLength()) {
             return false;
         }
-        return true;
-    }
-
-    private boolean hasEmpty(String str) {
-        return str == null || str.isEmpty();
-    }
-
-    private boolean hasValidLength(String str) {
-        if (!hasEmpty(str) && str.length() < this.minStringLength) {
+        if (requiredContent != null && !hasRequiredContent()) {
             return false;
         }
         return true;
     }
 
-    private boolean hasRequiredContent(String str) {
-        if (!hasEmpty(str)) {
+    private boolean isString() {
+        if (needNotEmpty && !isNull()) {
+            return this.o instanceof String;
+        }
+        return true;
+    }
+
+    private boolean hasEmpty() {
+        return this.str == null || this.str.isEmpty();
+    }
+
+    private boolean hasValidLength() {
+        if (!hasEmpty() && this.str.length() < this.minStringLength) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasRequiredContent() {
+        if (!hasEmpty()) {
             for (String s : requiredContent) {
-                if (!str.contains(s)) {
+                if (!this.str.contains(s)) {
                     return false;
                 }
             }

@@ -25,42 +25,43 @@ public class NumberSchema extends BaseSchema {
     }
 
     @Override
-    public final boolean isValid(Object o) {
-        if (needNotNull && isNull(o)) {
+    public final boolean isValid(Object object) {
+        this.o = object;
+        if (needNotNull && isNull()) {
             return false;
         }
-        if (needNotNull && !isNumber(o)) {
+        if (needNotNull && !isNumber()) {
             return false;
         }
-        if (needPositive && !isPositive(o)) {
+        if (needPositive && !isPositive()) {
             return false;
         }
-        if (needRange && !inRange(o)) {
+        if (needRange && !inRange()) {
             return false;
         }
         return true;
     }
 
-    private boolean isNumber(Object o) {
-        if (!isNull(o)) {
+    private boolean isNumber() {
+        if (!isNull()) {
             return o instanceof Number;
         }
         return false;
     }
 
-    private boolean isPositive(Object o) {
-        if (isNull(o) && !needNotNull) {
+    private boolean isPositive() {
+        if (isNull() && !needNotNull) {
             return true;
         }
-        if (!isNull(o) && isNumber(o)) {
+        if (!isNull() && isNumber()) {
             int x = (int) o;
             return x > 0;
         }
         return false;
     }
 
-    private boolean inRange(Object o) {
-        if (!isNull(o) && isNumber(o)) {
+    private boolean inRange() {
+        if (!isNull() && isNumber()) {
             int x = (int) o;
             return x >= lowerBound && x <= upperBound;
         }
