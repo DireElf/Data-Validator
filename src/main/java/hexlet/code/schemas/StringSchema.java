@@ -7,7 +7,7 @@ public class StringSchema extends BaseSchema {
     private boolean needNotEmpty;
     private int minStringLength;
     private List<String> requiredContent;
-    private String str;
+    private String string;
 
     public final StringSchema required() {
         this.needNotEmpty = true;
@@ -28,38 +28,33 @@ public class StringSchema extends BaseSchema {
     }
 
     @Override
-    public final boolean isValid(Object object) {
-        this.o = object;
+    public final boolean isValid(Object o) {
+        setObjectToValidate(o);
         if (isString()) {
-            this.str = (String) o;
+            this.string = (String) getObjectToValidate();
         } else {
             return false;
         }
-        if (needNotEmpty && hasEmpty()) {
-            return false;
-        }
-        if (minStringLength != 0 && !hasValidLength()) {
-            return false;
-        }
-        if (requiredContent != null && !hasRequiredContent()) {
-            return false;
-        }
-        return true;
+        return checkConditions(
+                needNotEmpty && hasEmpty(),
+                minStringLength != 0 && !hasValidLength(),
+                requiredContent != null && !hasRequiredContent()
+        );
     }
 
     private boolean isString() {
         if (needNotEmpty && !isNull()) {
-            return this.o instanceof String;
+            return getObjectToValidate() instanceof String;
         }
         return true;
     }
 
     private boolean hasEmpty() {
-        return this.str == null || this.str.isEmpty();
+        return this.string == null || this.string.isEmpty();
     }
 
     private boolean hasValidLength() {
-        if (!hasEmpty() && this.str.length() < this.minStringLength) {
+        if (!hasEmpty() && this.string.length() < this.minStringLength) {
             return false;
         }
         return true;
@@ -68,7 +63,7 @@ public class StringSchema extends BaseSchema {
     private boolean hasRequiredContent() {
         if (!hasEmpty()) {
             for (String s : requiredContent) {
-                if (!this.str.contains(s)) {
+                if (!this.string.contains(s)) {
                     return false;
                 }
             }

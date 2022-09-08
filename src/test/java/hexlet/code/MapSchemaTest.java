@@ -43,7 +43,7 @@ class MapSchemaTest {
         schema.sizeOf(1);
         assertThat(schema.isValid(new HashMap<>())).isFalse();
         assertThat(schema.isValid(Map.of("test", 1))).isTrue();
-        assertThat(schema.isValid(testMap)).isTrue();
+        assertThat(schema.isValid(testMap)).isFalse();
     }
 
     @Test

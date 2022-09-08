@@ -6,7 +6,7 @@ import java.util.Set;
 public class MapSchema extends BaseSchema {
     private boolean needNotNull;
     private boolean needMap;
-    private int minEntriesAmount;
+    private int entriesRequired;
     private Map<String, BaseSchema> schemas;
 
     public final MapSchema required() {
@@ -16,7 +16,7 @@ public class MapSchema extends BaseSchema {
     }
 
     public final MapSchema sizeOf(int size) {
-        this.minEntriesAmount = size;
+        this.entriesRequired = size;
         return this;
     }
 
@@ -26,41 +26,34 @@ public class MapSchema extends BaseSchema {
     }
 
     @Override
-    public final boolean isValid(Object object) {
-        this.o = object;
-        if (needNotNull && isNull()) {
-            return false;
-        }
-        if (needMap && !isMap()) {
-            return false;
-        }
-        if (minEntriesAmount > 0 && !hasMinEntriesAmount()) {
-            return false;
-        }
-        if (this.schemas != null && !hasSchema()) {
-            return false;
-        }
-        return true;
+    public final boolean isValid(Object o) {
+        setObjectToValidate(o);
+        return checkConditions(
+                needNotNull && isNull(),
+                needMap && !isMap(),
+                entriesRequired > 0 && !hasMinEntriesAmount(),
+                this.schemas != null && !hasSchema()
+        );
     }
 
     private boolean isMap() {
         if (!isNull()) {
-            return this.o instanceof Map;
+            return getObjectToValidate() instanceof Map;
         }
         return false;
     }
 
     private boolean hasMinEntriesAmount() {
         if (!isNull() && isMap()) {
-            Map<?, ?> map = (Map<?, ?>) this.o;
-            return map.size() >= minEntriesAmount;
+            Map<?, ?> map = (Map<?, ?>) getObjectToValidate();
+            return map.size() == entriesRequired;
         }
         return true;
     }
 
     private boolean hasSchema() {
         if (!isNull() && isMap()) {
-            Map<?, ?> map = (Map<?, ?>) this.o;
+            Map<?, ?> map = (Map<?, ?>) getObjectToValidate();
             Set<?> keys = map.keySet();
             for (Object key : keys) {
                 if (this.schemas.containsKey(key)) {
