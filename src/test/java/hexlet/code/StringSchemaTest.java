@@ -8,15 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StringSchemaTest {
-    private static StringSchema schema;
-
-    public static StringSchema getSchema() {
-        return schema;
-    }
-
-    public static void setSchema(StringSchema sch) {
-        StringSchemaTest.schema = sch;
-    }
+    private StringSchema schema;
 
     @BeforeEach
     void setUp() {
@@ -27,9 +19,11 @@ class StringSchemaTest {
     void required() {
         assertThat(schema.isValid("")).isTrue();
         assertThat(schema.isValid(null)).isTrue();
-        schema = schema.required();
+        assertThat(schema.isValid(1)).isTrue();
+        schema.required();
         assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid(1)).isFalse();
         assertThat(schema.isValid("what does the fox say")).isTrue();
     }
 
@@ -44,7 +38,7 @@ class StringSchemaTest {
     @Test
     void minLength() {
         final int sampleLength = 4;
-        schema = schema.minLength(sampleLength);
+        schema.minLength(sampleLength);
         assertThat(schema.isValid("what")).isTrue();
         assertThat(schema.isValid("what ")).isTrue();
         assertThat(schema.isValid("h")).isFalse();

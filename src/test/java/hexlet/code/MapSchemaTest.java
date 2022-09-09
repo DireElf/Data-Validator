@@ -12,20 +12,12 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MapSchemaTest {
-    private static MapSchema schema;
-    private static Map<Object, Object> testMap;
-
-    public static MapSchema getSchema() {
-        return schema;
-    }
-    public static void setSchema(MapSchema sch) {
-        schema = sch;
-    }
+    private MapSchema schema;
+    private final Map<Object, Object> testMap = Map.of("test", new int[]{1, 2}, "test1", new int[]{1, 2});
 
     @BeforeEach
     void setUp() {
         schema = new Validator().map();
-        testMap = Map.of("test", new int[]{1, 2}, "test1", new int[]{1, 2});
     }
 
     @Test
