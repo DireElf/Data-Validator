@@ -69,15 +69,15 @@ class StringSchemaTest {
         assertThat(schema.contains("wh").minLength(testLength1).isValid(testString)).isTrue();
         assertThat(schema.minLength(testLength1 + 1).contains("what").isValid(testString)).isTrue();
         assertThat(schema.required().contains("wh").minLength(testLength1 - 1).isValid(testString)).isTrue();
-        assertThat(schema.contains("what ").required().minLength(0).isValid(testString)).isTrue();
+        assertThat(schema.contains("what ").required().minLength(testLength1 + 1).isValid(testString)).isTrue();
     }
 
     @Test
     void mixturesWithIncorrectArgs() {
-        assertThat(schema.contains("what").required().minLength(testLength1).isValid("")).isFalse();
-        assertThat(schema.minLength(testLength1 + 1).contains("what").isValid("what")).isFalse();
-        assertThat(schema.contains("wah").isValid(testString + " ")).isFalse();
-        assertThat(schema.contains("what ").minLength(testLength1).isValid(testString + " ")).isFalse();
+        assertThat(schema.contains("").minLength(0).required().isValid("")).isFalse();
+        assertThat(schema.contains("what").minLength(testLength1).isValid("wha")).isFalse();
+        assertThat(schema.contains("what").minLength(testLength1 + 1).isValid("what")).isFalse();
+        assertThat(schema.contains("wah").minLength(testLength1 + 1).isValid("what ")).isFalse();
     }
 
     @AfterEach
