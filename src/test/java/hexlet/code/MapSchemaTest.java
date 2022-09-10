@@ -63,7 +63,7 @@ class MapSchemaTest {
 
         Map<String, Object> human4 = new HashMap<>();
         human4.put("name", "Valya");
-        human4.put("age", -1);
+        human4.put("age", -1d);
         assertThat(schema.isValid(human4)).isFalse();
     }
 

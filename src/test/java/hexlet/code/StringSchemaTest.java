@@ -65,7 +65,7 @@ class StringSchemaTest {
     }
 
     @Test
-    void mixturesWithCorrectArgs() {
+    void mixturesWithCorrectValue() {
         assertThat(schema.contains("wh").minLength(testLength1).isValid(testString)).isTrue();
         assertThat(schema.minLength(testLength1 + 1).contains("what").isValid(testString)).isTrue();
         assertThat(schema.required().contains("wh").minLength(testLength1 - 1).isValid(testString)).isTrue();
@@ -73,7 +73,7 @@ class StringSchemaTest {
     }
 
     @Test
-    void mixturesWithIncorrectArgs() {
+    void mixturesWithIncorrectValue() {
         assertThat(schema.contains("").minLength(0).required().isValid("")).isFalse();
         assertThat(schema.contains("what").minLength(testLength1).isValid("wha")).isFalse();
         assertThat(schema.contains("what").minLength(testLength1 + 1).isValid("what")).isFalse();

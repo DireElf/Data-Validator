@@ -1,8 +1,8 @@
 package hexlet.code.schemas;
 
 public class NumberSchema extends BaseSchema {
-    private int lowerBound;
-    private int upperBound;
+    private double lowerBound;
+    private double upperBound;
 
     public final NumberSchema required() {
         addCheck("isRequired");
@@ -14,7 +14,7 @@ public class NumberSchema extends BaseSchema {
         return this;
     }
 
-    public final NumberSchema range(int min, int max) {
+    public final NumberSchema range(double min, double max) {
         addCheck("inRange");
         this.lowerBound = min;
         this.upperBound = max;
@@ -32,7 +32,7 @@ public class NumberSchema extends BaseSchema {
         if (!(o instanceof Number)) {
             return false;
         } else {
-            return (int) o > 0;
+            return ((Number) o).doubleValue() > 0;
         }
     }
 
@@ -40,7 +40,7 @@ public class NumberSchema extends BaseSchema {
         if (!(o instanceof Number)) {
             return false;
         } else {
-            int x = (int) o;
+            double x = ((Number) o).doubleValue();
             return x >= lowerBound && x <= upperBound;
         }
     }
