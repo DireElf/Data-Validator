@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MapSchemaTest {
     private MapSchema schema;
     private final Map<Object, Object> testMap = Map.of("test", new int[]{1, 2});
-    private static final Map<Object, BaseSchema> SCHEMAS = new HashMap<>();
+    private static final Map<String, BaseSchema> SCHEMAS = new HashMap<>();
 
     @BeforeAll
     static void setSchemas() {
