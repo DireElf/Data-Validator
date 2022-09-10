@@ -71,20 +71,6 @@ class NumberSchemaTest {
         assertThat(schema.isValid(Double.MAX_VALUE)).isFalse();
     }
 
-    @Test
-    void mixturesWithCorrectValue() {
-        assertThat(schema.positive().range(testMin, testMax).isValid(1)).isTrue();
-        assertThat(schema.range(testMin, testMax).positive().isValid(testMax)).isTrue();
-        assertThat(schema.positive().range(testMin, testMax).required().isValid(1)).isTrue();
-    }
-
-    @Test
-    void mixturesWithIncorrectValue() {
-        assertThat(schema.positive().range(testMin, testMax).isValid(testMin - sampleNumber)).isFalse();
-        assertThat(schema.range(testMin, testMax).positive().isValid(testMax + sampleNumber)).isFalse();
-        assertThat(schema.positive().range(testMin, testMax).required().isValid(-sampleNumber)).isFalse();
-    }
-
     @AfterEach
     void tearDown() {
         schema = null;

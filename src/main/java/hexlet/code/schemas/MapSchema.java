@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class MapSchema extends BaseSchema {
     private int requiredSize;
-    private Map<String, BaseSchema> schemas;
+    private Map<Object, BaseSchema> schemas;
 
     public final MapSchema required() {
         addCheck("isRequired");
@@ -18,7 +18,7 @@ public class MapSchema extends BaseSchema {
         return this;
     }
 
-    public final MapSchema shape(Map<String, BaseSchema> requiredSchemas) {
+    public final MapSchema shape(Map<Object, BaseSchema> requiredSchemas) {
         addCheck("hasShape");
         this.schemas = requiredSchemas;
         return this;
