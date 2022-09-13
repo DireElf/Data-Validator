@@ -4,50 +4,27 @@ import java.util.Map;
 import java.util.Set;
 
 public class MapSchema extends BaseSchema {
-    private int requiredSize;
-    private Map<String, BaseSchema> schemas;
-
     public final MapSchema required() {
-        addCheck("isRequired");
+        addCheck(x -> x instanceof Map);
         return this;
     }
 
     public final MapSchema sizeof(int size) {
-        addCheck("isValidSize");
-        this.requiredSize = size;
+        addCheck(x -> x instanceof Map && ((Map<?, ?>) x).size() == size);
         return this;
     }
 
     public final MapSchema shape(Map<String, BaseSchema> requiredSchemas) {
-        addCheck("hasShape");
-        this.schemas = requiredSchemas;
+        addCheck(x -> x instanceof Map && hasShape(x, requiredSchemas));
         return this;
     }
 
-    private boolean isRequired(Object o) {
-        if (o == null) {
-            return false;
-        }
-        return o instanceof Map;
-    }
-
-    private boolean isValidSize(Object o) {
-        if (isRequired(o)) {
-            Map<?, ?> map = (Map<?, ?>) o;
-            return map.size() == requiredSize;
-        }
-        return false;
-    }
-
-    private boolean hasShape(Object o) {
-        if (!isRequired(o)) {
-            return false;
-        }
+    private boolean hasShape(Object o, Map<String, BaseSchema> schemas) {
         Map<?, ?> map = (Map<?, ?>) o;
         Set<?> keys = map.keySet();
         for (Object key : keys) {
-            if (this.schemas.containsKey(key)) {
-                BaseSchema schema = this.schemas.get(key);
+            if (schemas.containsKey(key)) {
+                BaseSchema schema = schemas.get(key);
                 if (!schema.isValid(map.get(key))) {
                     return false;
                 }

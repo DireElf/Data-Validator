@@ -10,8 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StringSchemaTest {
     private StringSchema schema;
     private final String testString = "what does the fox say";
-    private final int testLength1 = 4;
-    private final int testLength2 = 50;
 
     @BeforeEach
     void setUp() {
@@ -21,7 +19,7 @@ class StringSchemaTest {
     @Test
     void withoutRequired() {
         assertThat(schema.isValid("")).isTrue();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
+        assertThat(schema.isValid(testString)).isTrue();
         assertThat(schema.isValid(null)).isTrue();
         assertThat(schema.isValid(1)).isTrue();
     }
@@ -29,7 +27,7 @@ class StringSchemaTest {
     @Test
     void withRequired() {
         schema.required();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
+        assertThat(schema.isValid(testString)).isTrue();
         assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid(1)).isFalse();
@@ -37,30 +35,31 @@ class StringSchemaTest {
 
     @Test
     void containsCorrectSubstring() {
-        assertThat(schema.contains("").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains(" ").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("wh").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
+        assertThat(schema.contains("").isValid(testString)).isTrue();
+        assertThat(schema.contains(" ").isValid(testString)).isTrue();
+        assertThat(schema.contains("wh").isValid(testString)).isTrue();
+        assertThat(schema.contains("what").isValid(testString)).isTrue();
     }
 
     @Test
     void containsIncorrectSubstring() {
-        assertThat(schema.contains(" what").isValid("what does the fox say")).isFalse();
-        assertThat(schema.contains("say ").isValid("what does the fox say")).isFalse();
-        assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isFalse();
+        assertThat(schema.contains(" what").isValid(testString)).isFalse();
+        assertThat(schema.contains("say ").isValid(testString)).isFalse();
+        assertThat(schema.contains("whatthe").isValid(testString)).isFalse();
+        assertThat(schema.isValid(testString)).isFalse();
     }
 
     @Test
     void minLength() {
         assertThat(schema.isValid("wha")).isTrue();
-        schema.minLength(testLength1);
+        final int testLength = 4;
+        schema.minLength(testLength);
         assertThat(schema.isValid("what")).isTrue();
         assertThat(schema.isValid("what ")).isTrue();
         assertThat(schema.isValid("wha")).isFalse();
-        schema.minLength(testLength1 - 1);
+        schema.minLength(testLength - 1);
         assertThat(schema.isValid("wh")).isFalse();
-        assertThat(schema.isValid("wha")).isTrue();
+        assertThat(schema.isValid("wha")).isFalse();
         assertThat(schema.isValid("what")).isTrue();
     }
 
