@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema {
-    private List<Predicate> checkList = new ArrayList<>();
+    private List<Predicate<Object>> checkList = new ArrayList<>();
 
     public final boolean isValid(Object o) {
-        for (Predicate check : checkList) {
+        for (Predicate<Object> check : checkList) {
             if (!check.test(o)) {
                 return false;
             }
@@ -16,7 +16,7 @@ public abstract class BaseSchema {
         return true;
     }
 
-    public final void addCheck(Predicate check) {
+    public final void addCheck(Predicate<Object> check) {
         checkList.add(check);
     }
 }
