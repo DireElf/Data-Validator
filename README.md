@@ -6,7 +6,7 @@
 
 The project is designed to validate data by setting certain conditions. 
 
-The current build includes string validation (content, minimum length, presence of given substrings), number validation (numeric type, number sign, presence in a given range), and map validation (map data type, matching a specified size and/or validation scheme). Validation of any eight-bit numbers is available, including floating point numbers.
+The current build includes string validation (content, minimum length, presence of given substrings), number validation (numeric type, number sign, presence in a given range), and map validation (map data type, matching a specified size and/or validation scheme). Validation of any eight-byte numbers is available, including floating point numbers.
 
 Here are some examples:
 
