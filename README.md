@@ -4,7 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/150402524a7c3b3a6988/maintainability)](https://codeclimate.com/github/DireElf/java-project-78/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/150402524a7c3b3a6988/test_coverage)](https://codeclimate.com/github/DireElf/java-project-78/test_coverage)
 
-The project is designed to validate data by setting certain conditions. 
+The project is designed to data validation by setting certain conditions. 
 
 The current build includes string validation (content, minimum length, presence of given substrings), number validation (numeric type, number sign, presence in a given range), and map validation (map data type, matching a specified size and/or validation scheme). Validation of any eight-byte numbers is available, including floating point numbers.
 
