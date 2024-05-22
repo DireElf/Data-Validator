@@ -3,11 +3,14 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/150402524a7c3b3a6988/maintainability)](https://codeclimate.com/github/DireElf/java-project-78/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/150402524a7c3b3a6988/test_coverage)](https://codeclimate.com/github/DireElf/java-project-78/test_coverage)
 
-The project is designed to data validation by setting certain conditions. 
+The project is designed for data validation by setting specific conditions.
 
-The current build includes string validation (content, minimum length, presence of given substrings), number validation (numeric type, number sign, presence in a given range), and map validation (map data type, matching a specified size and/or validation scheme). Validation of any eight-byte numbers is available, including floating point numbers.
+The current build includes the following validation types:
+- **String Validation:** Checks content, minimum length, and presence of specified substrings.
+- **Number Validation:** Verifies numeric type, sign, and presence within a given range.
+- **Map Validation:** Ensures correct map data type, matches a specified size, and adheres to a validation scheme.
 
-Here are some examples:
+Additionally, it supports the validation of any eight-byte numbers, including floating-point numbers.
 
 ```java
 Validator v = new Validator();
